@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,11 @@ namespace Player
         {
             get => isWantingJump;
             set => isWantingJump = value;
+        }
+
+        private void Update()
+        {
+            ReadInput();
         }
 
         public void ReadInput()

@@ -10,30 +10,55 @@ namespace Player
         [SerializeField, Range(0f, 10f)] 
         private float maxSpeed = 6f;
         [SerializeField, Range(0f, 10f)] 
-        private float maxAcceleration = 8f;
+        private float maxAcceleration = 10f;
         [SerializeField, Range(0f, 100f)] 
-        private float maxAirAcceleration = 4f;
+        private float maxAirAcceleration = 5f;
         [SerializeField, Range(0f, 4f)] 
         private float jumpHeight = 2f;
         [SerializeField, Range(0f, 1f)] 
         private float jumpFlexibility = 1f; //Todo Change to better name
-        
+
         private Vector3 velocity;
         private Vector3 desiredVelocity;
         private Rigidbody body;
         private bool isOnGround;
+        private PlayerInputComponent inputComponent;
+
+        public float JumpFlexibility => jumpFlexibility;
+        public bool IsOnGround 
+        {
+            get
+            {
+                return isOnGround;
+            }
+            set
+            {
+                isOnGround = value;
+            }
+        }
 
         private void Awake()
         {
             body = GetComponent<Rigidbody>();
+            inputComponent = GetComponent<PlayerInputComponent>();
         }
 
-        public void SetDesiredVelocity(Vector2 playerInput)
+        private void Update()
+        {
+            SetDesiredVelocity(inputComponent.PlayerInput);
+        }
+
+        private void FixedUpdate()
+        {
+            PlayerMovement();
+        }
+
+        private void SetDesiredVelocity(Vector2 playerInput)
         {
             desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
         }
 
-        public void PlayerMovement(PlayerInputComponent inputComponent)
+        private void PlayerMovement()
         {
             velocity = body.velocity;
             float acceleration = isOnGround ? maxAcceleration : maxAirAcceleration;
@@ -58,19 +83,19 @@ namespace Player
             isOnGround = false;
         }
 
-        private void OnCollisionEnter(Collision other)
-        {
-            EvaluateCollision(other);
-        }
-
-        private void EvaluateCollision(Collision collision)
-        {
-            for (int i = 0; i < collision.contactCount; i++)
-            {
-                Vector3 normal = collision.GetContact(i).normal;
-                isOnGround |= normal.y >= jumpFlexibility;
-            }
-        }
+        // private void OnCollisionEnter(Collision other)
+        // {
+        //     EvaluateCollision(other);
+        // }
+        //
+        // private void EvaluateCollision(Collision collision)
+        // {
+        //     for (int i = 0; i < collision.contactCount; i++)
+        //     {
+        //         Vector3 normal = collision.GetContact(i).normal;
+        //         isOnGround |= normal.y >= jumpFlexibility;
+        //     }
+        // }
     }
 }
 
