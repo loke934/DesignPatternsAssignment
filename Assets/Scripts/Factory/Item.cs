@@ -9,19 +9,11 @@ namespace Factory
         Can,
         Plastic,
         Glass,
-        Wastebin
+        WasteBin
     }
     public abstract class Item : MonoBehaviour
     {
-        protected abstract ItemType ItemType { get; }
         public bool IsActive => gameObject.activeInHierarchy;
-        
-        protected abstract void OnCollisionEnter(Collision other);
-
-        protected void ReturnToObjectPool()
-        {
-            gameObject.SetActive(false);
-        }
     }
 }
 

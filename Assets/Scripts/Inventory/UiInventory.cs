@@ -49,7 +49,7 @@ namespace Inventory
                 case ItemType.Glass:
                     text = glassText;
                     break;
-                case ItemType.Wastebin:
+                case ItemType.WasteBin:
                     text = wasteBinText;
                     break;
             }

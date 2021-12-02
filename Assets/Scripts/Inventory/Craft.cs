@@ -19,7 +19,7 @@ namespace Inventory
             if (ItemInventory.Instance.GetAmountFromInventory(ItemType.Can) >= craftingAmount)
             {
                 ItemInventory.Instance.RemoveFromInventory(ItemType.Can, craftingAmount);
-                ItemInventory.Instance.AddToInventory(ItemType.Wastebin, 1);
+                ItemInventory.Instance.AddToInventory(ItemType.WasteBin);
             }
         }
     }

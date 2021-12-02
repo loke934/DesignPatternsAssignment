@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8096120776504373647}
   m_Layer: 0
   m_Name: WasteBin
-  m_TagString: Untagged
+  m_TagString: WasteBin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

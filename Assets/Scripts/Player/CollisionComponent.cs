@@ -11,8 +11,10 @@ namespace Player
     public class CollisionComponent : MonoBehaviour
     {
         private PhysicsBodyComponent physicsComponent;
-        private const string TagWaste = "Waste";
         private const string TagWasteBin = "WasteBin";
+        private bool isAtWasteBin;
+
+        public bool IsAtWasteBin => isAtWasteBin;
 
         private void Awake()
         {
@@ -22,10 +24,27 @@ namespace Player
         private void OnCollisionEnter(Collision other)
         {
             CheckIfCanJump(other);
+            
             if (other.gameObject.TryGetComponent(out WasteBehaviour wasteBehaviour))
             {
                 Pool.Instance.Return(other.gameObject);
-                ItemInventory.Instance.AddToInventory(wasteBehaviour.itemType, 1);
+                ItemInventory.Instance.AddToInventory(wasteBehaviour.itemType);
+            }
+        }
+
+        private void OnCollisionStay(Collision other)
+        {
+            if (other.gameObject.CompareTag(TagWasteBin))
+            {
+                isAtWasteBin = true;
+            }
+        }
+        
+        private void OnCollisionExit(Collision other)
+        {
+            if (other.gameObject.CompareTag(TagWasteBin))
+            {
+                isAtWasteBin = false;
             }
         }
 
