@@ -34,7 +34,10 @@ namespace Player
             for (int i = 0; i < collision.contactCount; i++)
             {
                 Vector3 normal = collision.GetContact(i).normal;
-                physicsComponent.IsOnGround |= normal.y >= physicsComponent.JumpFlexibility;
+                if (physicsComponent.IsOnGround || normal.y >= physicsComponent.JumpFlexibility)
+                {
+                    physicsComponent.IsOnGround = true;
+                }
             }
         }
     }

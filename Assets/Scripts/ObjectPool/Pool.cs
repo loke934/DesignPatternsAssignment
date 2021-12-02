@@ -61,7 +61,7 @@ namespace ObjectPool
         //     }
         // }
 
-        public Item GetPoolObject(ItemType itemType)
+        public Item GetPoolObject(ItemType itemType, Vector3 position)
         {
             Item poolObject = null;
             for (int i = 0; i < poolDictionary[itemType].Count; i++)
@@ -81,7 +81,7 @@ namespace ObjectPool
             }
             
             poolObject.gameObject.SetActive(true);
-            poolObject.transform.position = GetRandomPosition();
+            poolObject.transform.position = position;
             return poolObject;
         }
 

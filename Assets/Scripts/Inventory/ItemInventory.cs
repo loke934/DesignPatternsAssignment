@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Factory;
+using ObjectPool;
 using UnityEngine;
 
 namespace Inventory
@@ -10,10 +11,13 @@ namespace Inventory
     {
         private static ItemInventory instance;
         private Dictionary<ItemType, int> inventoryLookUp;
-        private int amoutOfCansForWasteBin = 3;
-        private bool isCanCraft;
+        private int craftingAmount = 3;
 
-        public event Action<ItemType, int> OnAddToInventory;
+        public int CraftingAmount => craftingAmount;
+
+        public event Action<ItemType, int> OnUpDateInventory;
+        public event Action OnCanCraft;
+        public event Action OnCantCraft;
         public static ItemInventory Instance
         {
             get
@@ -40,6 +44,11 @@ namespace Inventory
             inventoryLookUp = new Dictionary<ItemType, int>();
         }
 
+        public int GetAmountFromInventory(ItemType itemType)
+        {
+            return inventoryLookUp[itemType];
+        }
+
         public void AddToInventory(ItemType itemType, int amount)
         {
             if (!inventoryLookUp.ContainsKey(itemType))
@@ -50,26 +59,51 @@ namespace Inventory
             {
                 inventoryLookUp[itemType] += amount;
             }
-            Debug.Log("Inventory" + itemType + "" + "amount: " +inventoryLookUp[itemType]);
-            OnAddToInventory?.Invoke(itemType, inventoryLookUp[itemType]);
+
+            OnUpDateInventory?.Invoke(itemType, inventoryLookUp[itemType]);
+            if (itemType == ItemType.Can)
+            {
+                CheckIfCraftingTime();
+            }
         }
 
         public void RemoveFromInventory(ItemType itemType, int amount)
         {
-            inventoryLookUp[itemType] += amount;
-            //invoke event
+            inventoryLookUp[itemType] -= amount;
+            if (itemType == ItemType.Can)
+            {
+                CheckIfCraftingTime();
+            }
+            OnUpDateInventory?.Invoke(itemType, inventoryLookUp[itemType]);
         }
 
         private void CheckIfCraftingTime()
         {
-            if (inventoryLookUp[ItemType.Can] >= amoutOfCansForWasteBin)
+            if (inventoryLookUp[ItemType.Can] >= craftingAmount)
             {
-                isCanCraft = true;
-                //invoke event that enables button for crafting
+                OnCanCraft?.Invoke();
             }
-            else if (inventoryLookUp[ItemType.Can] <= GetHashCode())
+            else if (inventoryLookUp[ItemType.Can] <= craftingAmount)
             {
-                isCanCraft = false;
+                OnCantCraft?.Invoke();
+            }
+        }
+
+        public bool IsWastebinIsAvailable()
+        {
+            if (GetAmountFromInventory(ItemType.Wastebin) > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void PlaceWastebin(Vector3 position) //Todo in another place?? Run on input
+        {
+            if (IsWastebinIsAvailable())
+            {
+                RemoveFromInventory(ItemType.Wastebin,1);
+                Pool.Instance.GetPoolObject(ItemType.Wastebin, new Vector3(position.x, position.y, position.z + 1f));
             }
         }
     }

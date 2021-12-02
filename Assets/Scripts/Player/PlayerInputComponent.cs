@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Inventory;
 using UnityEngine;
 
 namespace Player
@@ -22,12 +23,17 @@ namespace Player
             ReadInput();
         }
 
-        public void ReadInput()
+        private void ReadInput()
         {
             playerInput.x = Input.GetAxis("Horizontal");
             playerInput.y = Input.GetAxis("Vertical");
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
             isWantingJump |= Input.GetButtonDown("Jump");
+
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                ItemInventory.Instance.PlaceWastebin(transform.position);
+            }
         }
     }
 }

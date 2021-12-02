@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Factory;
 using TMPro;
+using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
 
 namespace Inventory
 {
@@ -12,6 +12,10 @@ namespace Inventory
     {
         [SerializeField] 
         private TextMeshProUGUI canText;
+        [SerializeField] 
+        private Button canButton;
+        [SerializeField] 
+        private TextMeshProUGUI canButtonText;
         [SerializeField] 
         private TextMeshProUGUI plasticText;
         [SerializeField] 
@@ -21,10 +25,17 @@ namespace Inventory
 
         private void Start()
         {
-            ItemInventory.Instance.OnAddToInventory += UpdateInventoryText;
+            SubscribeToEvents();
         }
 
-        private void UpdateInventoryText(ItemType itemType, int amout)
+        private void SubscribeToEvents()
+        {
+            ItemInventory.Instance.OnUpDateInventory += UpdateInventoryText;
+            ItemInventory.Instance.OnCanCraft += ActivateCraftText;
+            ItemInventory.Instance.OnCantCraft += DeactivateCraftText;
+        }
+
+        private void UpdateInventoryText(ItemType itemType, int amount)
         {
             TextMeshProUGUI text = null;
             switch (itemType)
@@ -42,9 +53,17 @@ namespace Inventory
                     text = wasteBinText;
                     break;
             }
-            text.text = amout.ToString();
+            text.text = amount.ToString();
+        }
+
+        private void ActivateCraftText()
+        {
+            canButtonText.color = Color.green;
+        }
+        private void DeactivateCraftText()
+        {
+            canButtonText.color = Color.black;
         }
     }
-    
 }
 

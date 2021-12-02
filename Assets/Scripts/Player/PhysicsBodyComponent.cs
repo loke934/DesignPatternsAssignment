@@ -82,20 +82,6 @@ namespace Player
             velocity.y += Mathf.Sqrt( gravity * jumpHeight);
             isOnGround = false;
         }
-
-        // private void OnCollisionEnter(Collision other)
-        // {
-        //     EvaluateCollision(other);
-        // }
-        //
-        // private void EvaluateCollision(Collision collision)
-        // {
-        //     for (int i = 0; i < collision.contactCount; i++)
-        //     {
-        //         Vector3 normal = collision.GetContact(i).normal;
-        //         isOnGround |= normal.y >= jumpFlexibility;
-        //     }
-        // }
     }
 }
 
