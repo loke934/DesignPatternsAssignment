@@ -14,10 +14,12 @@ namespace Inventory
         private int craftingAmount = 3;
         [SerializeField, Range(1,10)] 
         private int amountToAdd = 1;
+        private int placedWasteBins = 0;
         
         public event Action<ItemType, int> OnUpDateInventory;
         public event Action OnCanCraft;
         public event Action OnCantCraft;
+        public event Action OnAllBinsPlaced;
         
         public int CraftingAmount => craftingAmount;
         
@@ -45,6 +47,9 @@ namespace Inventory
             }
             
             inventoryLookUp = new Dictionary<ItemType, int>();
+            inventoryLookUp.Add(ItemType.Can,0);
+            inventoryLookUp.Add(ItemType.Plastic,0);
+            inventoryLookUp.Add(ItemType.Glass,0);
             inventoryLookUp.Add(ItemType.WasteBin,0);
         }
 
@@ -55,14 +60,7 @@ namespace Inventory
 
         public void AddToInventory(ItemType itemType)
         {
-            if (!inventoryLookUp.ContainsKey(itemType))
-            {
-                inventoryLookUp.Add(itemType,amountToAdd);
-            }
-            else
-            {
-                inventoryLookUp[itemType] += amountToAdd;
-            }
+            inventoryLookUp[itemType] += amountToAdd;
             if (itemType == ItemType.Can)
             {
                 CheckIfCraftingTime();
@@ -101,6 +99,11 @@ namespace Inventory
             {
                 RemoveFromInventory(ItemType.WasteBin);
                 Pool.Instance.GetPoolObject(ItemType.WasteBin, new Vector3(position.x, position.y, position.z + 1f));
+                placedWasteBins++;
+                if (placedWasteBins >= 3)
+                {
+                    OnAllBinsPlaced?.Invoke();
+                }
             }
         }
     }

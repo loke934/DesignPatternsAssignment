@@ -9,11 +9,14 @@ namespace Factory
         Can,
         Plastic,
         Glass,
-        WasteBin
+        WasteBin,
+        Undefined
     }
     public abstract class Item : MonoBehaviour
     {
         public bool IsActive => gameObject.activeInHierarchy;
+
+        public abstract void Throw();
     }
 }
 

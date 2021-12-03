@@ -9,7 +9,7 @@ namespace ObjectPool
 {
     public class Pool : MonoBehaviour
     {
-        private static Pool instance; //Bc only want one pool instance and need a global access)?)
+        private static Pool instance;
         [SerializeField] 
         private ItemFactory itemFactory;
         public Dictionary<ItemType, List<Item>> poolDictionary = new Dictionary<ItemType, List<Item>>(); //Todo Change to queue?
@@ -59,7 +59,7 @@ namespace ObjectPool
         //         }
         //         poolDictionary.Add(itemSettings[i].ItemType, objectList);
         //     }
-        // }
+        // } //Todo delete if it's in factory
 
         public Item GetPoolObject(ItemType itemType, Vector3 position)
         {

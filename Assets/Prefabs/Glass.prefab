@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1525409970842175740}
   - component: {fileID: 8030050457525211120}
   - component: {fileID: -8975044411745436255}
+  - component: {fileID: -1450136629498367367}
   m_Layer: 0
   m_Name: Glass
   m_TagString: Waste
@@ -109,3 +110,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 2
+--- !u!54 &-1450136629498367367
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2150746842041831719}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
