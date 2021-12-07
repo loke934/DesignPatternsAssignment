@@ -8,15 +8,21 @@ namespace ObjectPool
 {
     public class WasteSpawner : MonoBehaviour
     {
+        [SerializeField, Range(5f, 120f)] 
+        private float timeBetweenSpawn = 30f;
+        [SerializeField, Range(1, 10)] 
+        private int numOfSpawns = 5;
         [SerializeField] 
         public List<WasteSpawnSettings> spawnSettings;
-        private bool isAllWasteBins;
+        private bool isGameOver;
+
+        public event Action OnGameOver;
 
         private void Start()
         {
             ItemInventory.Instance.OnAllBinsPlaced += StopSpawning;
             InitialSpawning();
-            StartCoroutine(Spawn());
+            StartCoroutine(ContinuousSpawn());
         }
 
         private void InitialSpawning()
@@ -33,24 +39,30 @@ namespace ObjectPool
 
         private void StopSpawning() 
         {
-            StopCoroutine(Spawn());
+            isGameOver = true;
+            StopCoroutine(ContinuousSpawn());
         }
 
-        private IEnumerator Spawn()
+        private IEnumerator ContinuousSpawn()
         {
-            while (!isAllWasteBins)
-            {
-                yield return new WaitForSeconds(60f);
             
-                for (int i = 0; i < spawnSettings.Count; i++)
+            for (int i = 0; i < numOfSpawns; i++)
+            {
+                yield return new WaitForSeconds(timeBetweenSpawn);
+
+                if (!isGameOver)
                 {
-                    for (int j = 0; j < spawnSettings[i].spawningAmount; j++)
+                    for (int o = 0; o < spawnSettings.Count; o++)
                     {
-                        Vector3 position = Pool.Instance.GetRandomPosition();
-                        Pool.Instance.GetPoolObject(spawnSettings[i].itemType, position);
+                        for (int m = 0; m < spawnSettings[o].spawningAmount; m++)
+                        {
+                            Vector3 position = Pool.Instance.GetRandomPosition();
+                            Pool.Instance.GetPoolObject(spawnSettings[o].itemType, position);
+                        }
                     }
                 }
             }
+            OnGameOver?.Invoke(); //Todo do something here
         }
     }
 }

@@ -1,22 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Factory
 {
     public enum ItemType
     {
+        Undefined,
         Can,
         Plastic,
         Glass,
-        WasteBin,
-        Undefined
+        WasteBin
     }
     public abstract class Item : MonoBehaviour
     {
+        protected ItemType itemType;
+
+        public ItemType ItemType
+        {
+            get => itemType;
+            set => itemType = value;
+        }
+
         public bool IsActive => gameObject.activeInHierarchy;
 
-        public abstract void Throw();
+        public virtual void Throw(){}
     }
 }
 

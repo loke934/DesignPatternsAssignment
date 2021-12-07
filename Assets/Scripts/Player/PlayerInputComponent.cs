@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using Factory;
 using Inventory;
@@ -13,7 +10,7 @@ namespace Player
     {
         private Vector2 playerInput;
         private bool isWantingJump;
-       
+
         public Vector2 PlayerInput => playerInput;
         public bool IsWantingJump
         {
@@ -24,6 +21,7 @@ namespace Player
         private void Update()
         {
             ReadInput();
+            SetRotation();
         }
 
         private void ReadInput()
@@ -32,12 +30,11 @@ namespace Player
             playerInput.y = Input.GetAxis("Vertical");
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
             isWantingJump |= Input.GetButtonDown("Jump");
-
+            
             if (Input.GetKeyDown(KeyCode.F))
             {
-                ItemInventory.Instance.PlaceWasteBin(transform.position);
+                ItemInventory.Instance.PlaceWasteBin(transform.position, transform.forward);
             }
-
             if (Input.GetKeyDown(KeyCode.C))
             {
                 Throw(KeyCode.C);
@@ -74,7 +71,29 @@ namespace Player
                 Pool.Instance.GetPoolObject(item, new Vector3(transform.position.x, transform.position.y, transform.position.z + 1.5f)).Throw();
                 ItemInventory.Instance.RemoveFromInventory(item);
             }
-                
+        }
+
+        private void SetRotation()
+        {
+            Quaternion rotation = transform.rotation;
+            if (playerInput.x == -1)
+            {
+                rotation = Quaternion.AngleAxis(-90f, Vector3.up);
+            }
+            else if (playerInput.x == 1)
+            {
+                rotation = Quaternion.AngleAxis(90f, Vector3.up);
+            }
+
+            if (playerInput.y == -1)
+            {
+                rotation = Quaternion.AngleAxis(-180f, Vector3.up);
+            }
+            else if (playerInput.y == 1)
+            {
+                rotation = Quaternion.AngleAxis(0f, Vector3.up);
+            }
+            transform.rotation = rotation;
         }
     }
 }

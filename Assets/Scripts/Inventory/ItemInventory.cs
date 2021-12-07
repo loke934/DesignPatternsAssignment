@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Factory;
 using ObjectPool;
@@ -11,28 +10,24 @@ namespace Inventory
     {
         private static ItemInventory instance;
         private Dictionary<ItemType, int> inventoryLookUp;
-        private int craftingAmount = 3;
         [SerializeField, Range(1,10)] 
         private int amountToAdd = 1;
-        private int placedWasteBins = 0;
+        [SerializeField, Range(1,6)] 
+        private int winAmount = 3;
+        private int placedWasteBins;
+        private int craftingCost = 3;
         
-        public event Action<ItemType, int> OnUpDateInventory;
+        public event Action<ItemType, int> OnUpdateInventory;
         public event Action OnCanCraft;
         public event Action OnCantCraft;
         public event Action OnAllBinsPlaced;
         
-        public int CraftingAmount => craftingAmount;
+        public int CraftingCost => craftingCost;
         
         public static ItemInventory Instance
         {
-            get
-            {
-                return instance;
-            }
-            private set
-            {
-                instance = value;
-            }
+            get => instance;
+            private set => instance = value;
         }
 
         private void Awake()
@@ -46,11 +41,13 @@ namespace Inventory
                 instance = this;
             }
             
-            inventoryLookUp = new Dictionary<ItemType, int>();
-            inventoryLookUp.Add(ItemType.Can,0);
-            inventoryLookUp.Add(ItemType.Plastic,0);
-            inventoryLookUp.Add(ItemType.Glass,0);
-            inventoryLookUp.Add(ItemType.WasteBin,0);
+            inventoryLookUp = new Dictionary<ItemType, int>
+            {
+                {ItemType.Can, 0},
+                {ItemType.Plastic, 0},
+                {ItemType.Glass, 0},
+                {ItemType.WasteBin, 0}
+            };
         }
 
         public int GetAmountFromInventory(ItemType itemType)
@@ -63,9 +60,9 @@ namespace Inventory
             inventoryLookUp[itemType] += amountToAdd;
             if (itemType == ItemType.Can)
             {
-                CheckIfCraftingTime();
+                UpdateCraftingStatus();
             }
-            OnUpDateInventory?.Invoke(itemType, inventoryLookUp[itemType]);
+            OnUpdateInventory?.Invoke(itemType, inventoryLookUp[itemType]);
         }
 
         public void RemoveFromInventory(ItemType itemType, int amount = 1)
@@ -75,32 +72,33 @@ namespace Inventory
                 inventoryLookUp[itemType] -= amount;
                 if (itemType == ItemType.Can)
                 {
-                    CheckIfCraftingTime();
+                    UpdateCraftingStatus();
                 }
-                OnUpDateInventory?.Invoke(itemType, inventoryLookUp[itemType]);
+                OnUpdateInventory?.Invoke(itemType, inventoryLookUp[itemType]);
             }
         }
 
-        private void CheckIfCraftingTime()
+        private void UpdateCraftingStatus()
         {
-            if (inventoryLookUp[ItemType.Can] >= craftingAmount)
+            if (inventoryLookUp[ItemType.Can] >= craftingCost)
             {
                 OnCanCraft?.Invoke();
             }
-            else if (inventoryLookUp[ItemType.Can] <= craftingAmount)
+            else if (inventoryLookUp[ItemType.Can] <= craftingCost)
             {
                 OnCantCraft?.Invoke();
             }
         }
 
-        public void PlaceWasteBin(Vector3 position)
+        public void PlaceWasteBin(Vector3 position, Vector3 direction)
         {
             if (GetAmountFromInventory(ItemType.WasteBin) > 0)
             {
                 RemoveFromInventory(ItemType.WasteBin);
-                Pool.Instance.GetPoolObject(ItemType.WasteBin, new Vector3(position.x, position.y, position.z + 1f));
+                Pool.Instance.GetPoolObject(ItemType.WasteBin, position + direction);
+                //new Vector3(position.x, position.y, position.z + 1f)
                 placedWasteBins++;
-                if (placedWasteBins >= 3)
+                if (placedWasteBins >= winAmount)
                 {
                     OnAllBinsPlaced?.Invoke();
                 }

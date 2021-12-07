@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Factory;
 using ObjectPool;
 using Inventory;
@@ -28,7 +25,7 @@ namespace Player
             if (other.gameObject.TryGetComponent(out WasteBehaviour wasteBehaviour))
             {
                 Pool.Instance.Return(other.gameObject);
-                ItemInventory.Instance.AddToInventory(wasteBehaviour.itemType);
+                ItemInventory.Instance.AddToInventory(wasteBehaviour.ItemType);
             }
         }
 
@@ -44,5 +41,4 @@ namespace Player
             }
         }
     }
-
 }

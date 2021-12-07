@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using Factory;
 using TMPro;
-using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
 namespace Inventory
@@ -22,7 +20,9 @@ namespace Inventory
         private TextMeshProUGUI glassText;
         [SerializeField] 
         private TextMeshProUGUI wasteBinText;
-
+        private const string CanText = "Can";
+        private const string CraftText = "CRAFT";
+        
         private void Start()
         {
             SubscribeToEvents();
@@ -30,7 +30,7 @@ namespace Inventory
 
         private void SubscribeToEvents()
         {
-            ItemInventory.Instance.OnUpDateInventory += UpdateInventoryText;
+            ItemInventory.Instance.OnUpdateInventory += UpdateInventoryText;
             ItemInventory.Instance.OnCanCraft += ActivateCraftText;
             ItemInventory.Instance.OnCantCraft += DeactivateCraftText;
         }
@@ -58,11 +58,13 @@ namespace Inventory
 
         private void ActivateCraftText()
         {
-            canButtonText.color = Color.green;
+            canButton.image.color = Color.green;
+            canButtonText.text = CraftText;
         }
         private void DeactivateCraftText()
         {
-            canButtonText.color = Color.black;
+            canButton.image.color = Color.yellow;
+            canButtonText.text = CanText;
         }
     }
 }

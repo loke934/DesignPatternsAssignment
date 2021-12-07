@@ -1,17 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Factory;
+using Inventory;
 
-namespace Inventory
+namespace Player
 {
     public class Craft : MonoBehaviour
     {
         private int craftingAmount;
         private void Start()
         {
-            craftingAmount = ItemInventory.Instance.CraftingAmount;
+            craftingAmount = ItemInventory.Instance.CraftingCost;
         }
 
         public void CraftWasteBin()

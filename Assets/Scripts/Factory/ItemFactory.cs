@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ObjectPool;
@@ -9,9 +7,14 @@ namespace Factory
     public class ItemFactory : MonoBehaviour
     {
         [SerializeField] 
-        public List<ItemSettings> itemSettings;
-        [SerializeField] 
-        private Pool objectPool;
+        private List<ItemSettings> itemSettings;
+        private int numberOfObjects;
+
+        public int NumberOfObjects
+        {
+            get => numberOfObjects;
+            set => numberOfObjects -= value;
+        }
 
         public void CreatePoolItems()
         {
@@ -21,15 +24,13 @@ namespace Factory
 
                 for (int m = 0; m < itemSettings[i].AmountOfItems; m++)
                 {
-                    Item obj = Instantiate(itemSettings[i].ItemPrefab, objectPool.transform);
-                    if (itemSettings[i].IsInactive)
-                    {
-                        obj.gameObject.SetActive(false);
-                    }
-                    obj.transform.position = objectPool.GetRandomPosition();
+                    Item obj = Instantiate(itemSettings[i].ItemPrefab, Pool.Instance.transform);
+                    obj.ItemType = itemSettings[i].ItemType;
+                    obj.gameObject.SetActive(false);
                     objectList.Add(obj);
+                    numberOfObjects++;
                 }
-                objectPool.poolDictionary.Add(itemSettings[i].ItemType, objectList);
+                Pool.Instance.poolDictionary.Add(itemSettings[i].ItemType, objectList);
             }
         }
 
@@ -41,6 +42,8 @@ namespace Factory
                 if (itemSettings[i].ItemType == itemType)
                 {
                     itemToReturn = Instantiate(itemSettings[i].ItemPrefab);
+                    itemToReturn.ItemType = itemSettings[i].ItemType;
+                    numberOfObjects++;
                     break;
                 }
             }

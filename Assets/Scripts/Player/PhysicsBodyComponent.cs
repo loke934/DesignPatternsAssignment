@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Player
@@ -16,7 +13,7 @@ namespace Player
         [SerializeField, Range(0f, 4f)] 
         private float jumpHeight = 2f;
         [SerializeField, Range(0f, 1f)] 
-        private float jumpFlexibility = 1f; //Todo Change to better name
+        private float jumpFlexibility = 1f;
 
         private Vector3 velocity;
         private Vector3 desiredVelocity;
@@ -25,16 +22,11 @@ namespace Player
         private PlayerInputComponent inputComponent;
 
         public float JumpFlexibility => jumpFlexibility;
-        public bool IsOnGround 
+        
+        public bool IsOnGround
         {
-            get
-            {
-                return isOnGround;
-            }
-            set
-            {
-                isOnGround = value;
-            }
+            get => isOnGround;
+            set => isOnGround = value;
         }
 
         private void Awake()

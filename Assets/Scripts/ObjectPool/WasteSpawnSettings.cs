@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Factory;
-using UnityEngine;
 
 namespace ObjectPool
 {
@@ -13,6 +10,5 @@ namespace ObjectPool
         public int startAmount;
         public int spawningAmount;
     }
-    
 }
 

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Factory;
@@ -12,19 +10,14 @@ namespace ObjectPool
         private static Pool instance;
         [SerializeField] 
         private ItemFactory itemFactory;
-        public Dictionary<ItemType, List<Item>> poolDictionary = new Dictionary<ItemType, List<Item>>(); //Todo Change to queue?
-
-        //pool unaware of what the items are, create in factory and pool has the instances
+        [SerializeField, Range(100,300)] 
+        private int poolCapacity = 100;
+        public Dictionary<ItemType, List<Item>> poolDictionary = new Dictionary<ItemType, List<Item>>();
+        
         public static Pool Instance
         {
-            get
-            {
-                return instance;
-            }
-            private set
-            {
-                instance = value;
-            }
+            get => instance;
+            private set => instance = value;
         }
 
         private void Awake()
@@ -37,29 +30,8 @@ namespace ObjectPool
             {
                 instance = this;
             }
-            
             itemFactory.CreatePoolItems();
         }
-
-        // private void CreatePools()
-        // {
-        //     for (int i = 0; i < itemSettings.Count; i++)
-        //     {
-        //         List<Item> objectList = new List<Item>();
-        //
-        //         for (int m = 0; m < itemSettings[i].AmountOfItems; m++)
-        //         {
-        //             Item obj = Instantiate(itemSettings[i].ItemPrefab, transform);//REFER TO FACTORY FOR CREATION?
-        //             if (itemSettings[i].IsInactive)
-        //             {
-        //                 obj.gameObject.SetActive(false);
-        //             }
-        //             obj.transform.position = GetRandomPosition();
-        //             objectList.Add(obj);
-        //         }
-        //         poolDictionary.Add(itemSettings[i].ItemType, objectList);
-        //     }
-        // } //Todo delete if it's in factory
 
         public Item GetPoolObject(ItemType itemType, Vector3 position)
         {
@@ -87,14 +59,22 @@ namespace ObjectPool
 
         public void Return(GameObject gameObject)
         {
-            gameObject.SetActive(false);
+            if (itemFactory.NumberOfObjects > poolCapacity)
+            {
+                itemFactory.NumberOfObjects -= 1;
+                Destroy(gameObject);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
         
-        public Vector3 GetRandomPosition() //Todo so spawn pos is right on the ground
+        public Vector3 GetRandomPosition()
         {
             float x = Random.Range(-20f, 20f);
             float z = Random.Range(-20f, 20f);
-            return new Vector3(x, 0.5f, z);
+            return new Vector3(x, 5f, z);
         }
     }
 }
