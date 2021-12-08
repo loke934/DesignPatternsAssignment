@@ -52,8 +52,8 @@ namespace ObjectPool
                 poolDictionary[itemType].Add(poolObject);
             }
             
-            poolObject.gameObject.SetActive(true);
             poolObject.transform.position = position;
+            poolObject.gameObject.SetActive(true);
             return poolObject;
         }
 

@@ -22,7 +22,7 @@ namespace Factory
 
         public bool IsActive => gameObject.activeInHierarchy;
 
-        public virtual void Throw(){}
+        public virtual void AddForceToItem(Vector3 direction){}
     }
 }
 

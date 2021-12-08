@@ -1,8 +1,7 @@
 using UnityEngine;
 using Factory;
-using Inventory;
 
-namespace Player
+namespace Inventory
 {
     public class Craft : MonoBehaviour
     {

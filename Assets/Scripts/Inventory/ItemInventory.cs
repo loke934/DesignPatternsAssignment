@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Factory;
 using ObjectPool;
@@ -17,10 +16,12 @@ namespace Inventory
         private int placedWasteBins;
         private int craftingCost = 3;
         
-        public event Action<ItemType, int> OnUpdateInventory;
-        public event Action OnCanCraft;
-        public event Action OnCantCraft;
-        public event Action OnAllBinsPlaced;
+        public delegate void EventDelegate();
+        public delegate void InventoryDelegate(ItemType itemType, int amount);
+        public event InventoryDelegate OnUpdateInventory;
+        public event EventDelegate OnCanCraft;
+        public event EventDelegate OnCannotCraft;
+        public event EventDelegate OnAllBinsPlaced;
         
         public int CraftingCost => craftingCost;
         
@@ -86,7 +87,7 @@ namespace Inventory
             }
             else if (inventoryLookUp[ItemType.Can] <= craftingCost)
             {
-                OnCantCraft?.Invoke();
+                OnCannotCraft?.Invoke();
             }
         }
 
@@ -96,7 +97,6 @@ namespace Inventory
             {
                 RemoveFromInventory(ItemType.WasteBin);
                 Pool.Instance.GetPoolObject(ItemType.WasteBin, position + direction);
-                //new Vector3(position.x, position.y, position.z + 1f)
                 placedWasteBins++;
                 if (placedWasteBins >= winAmount)
                 {

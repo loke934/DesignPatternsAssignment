@@ -32,7 +32,7 @@ namespace Inventory
         {
             ItemInventory.Instance.OnUpdateInventory += UpdateInventoryText;
             ItemInventory.Instance.OnCanCraft += ActivateCraftText;
-            ItemInventory.Instance.OnCantCraft += DeactivateCraftText;
+            ItemInventory.Instance.OnCannotCraft += DeactivateCraftText;
         }
 
         private void UpdateInventoryText(ItemType itemType, int amount)
