@@ -9,7 +9,6 @@ namespace Inventory
     {
         private static ItemInventory instance;
         private Dictionary<ItemType, int> inventoryLookUp;
-        [SerializeField, Range(1,10)] 
         private int amountToAdd = 1;
         [SerializeField, Range(1,6)] 
         private int winAmount = 3;

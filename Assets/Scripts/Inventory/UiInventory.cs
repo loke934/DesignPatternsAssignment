@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Factory;
+using ObjectPool;
 using TMPro;
 using Button = UnityEngine.UI.Button;
 
@@ -20,6 +21,10 @@ namespace Inventory
         private TextMeshProUGUI glassText;
         [SerializeField] 
         private TextMeshProUGUI wasteBinText;
+        [SerializeField] 
+        private GameObject gameOverCanvas;
+        [SerializeField] 
+        private WasteSpawner wasteSpawner;
         private const string CanText = "Can";
         private const string CraftText = "CRAFT";
         
@@ -33,6 +38,7 @@ namespace Inventory
             ItemInventory.Instance.OnUpdateInventory += UpdateInventoryText;
             ItemInventory.Instance.OnCanCraft += ActivateCraftText;
             ItemInventory.Instance.OnCannotCraft += DeactivateCraftText;
+            wasteSpawner.OnGameOver += GameOver;
         }
 
         private void UpdateInventoryText(ItemType itemType, int amount)
@@ -65,6 +71,11 @@ namespace Inventory
         {
             canButton.image.color = Color.yellow;
             canButtonText.text = CanText;
+        }
+
+        private void GameOver()
+        {
+            gameOverCanvas.SetActive(true);
         }
     }
 }

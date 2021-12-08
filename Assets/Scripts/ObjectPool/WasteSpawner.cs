@@ -9,14 +9,16 @@ namespace ObjectPool
     public class WasteSpawner : MonoBehaviour
     {
         [SerializeField, Range(5f, 120f)] 
-        private float timeBetweenSpawn = 30f;
+        private float secondsBetweenSpawn = 30f;
         [SerializeField, Range(1, 10)] 
         private int numOfSpawns = 5;
         [SerializeField] 
         public List<WasteSpawnSettings> spawnSettings;
         private bool isGameOver;
 
-        public event Action OnGameOver;
+        public delegate void EventDelegate();
+
+        public event EventDelegate OnGameOver;
 
         private void Start()
         {
@@ -45,24 +47,26 @@ namespace ObjectPool
 
         private IEnumerator ContinuousSpawn()
         {
-            
-            for (int i = 0; i < numOfSpawns; i++)
+            if (!isGameOver)
             {
-                yield return new WaitForSeconds(timeBetweenSpawn);
-
-                if (!isGameOver)
+                for (int i = 0; i < numOfSpawns; i++)
                 {
-                    for (int o = 0; o < spawnSettings.Count; o++)
+                    yield return new WaitForSeconds(secondsBetweenSpawn);
+
+                    if (!isGameOver)
                     {
-                        for (int m = 0; m < spawnSettings[o].spawningAmount; m++)
+                        for (int o = 0; o < spawnSettings.Count; o++)
                         {
-                            Vector3 position = Pool.Instance.GetRandomPosition();
-                            Pool.Instance.GetPoolObject(spawnSettings[o].itemType, position);
+                            for (int m = 0; m < spawnSettings[o].spawningAmount; m++)
+                            {
+                                Vector3 position = Pool.Instance.GetRandomPosition();
+                                Pool.Instance.GetPoolObject(spawnSettings[o].itemType, position);
+                            }
                         }
                     }
                 }
             }
-            OnGameOver?.Invoke(); //Todo do something here
+            OnGameOver?.Invoke();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Player
             playerInput = Vector2.ClampMagnitude(playerInput, 1f);
             isWantingJump |= Input.GetButtonDown("Jump");
             
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 ItemInventory.Instance.PlaceWasteBin(transform.position, transform.forward);
             }

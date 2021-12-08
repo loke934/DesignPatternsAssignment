@@ -21,20 +21,20 @@ namespace Player
         {
             Vector2 playerInput = inputComponent.PlayerInput;
             Quaternion rotation = transform.rotation;
-            if (playerInput.x == -1)
+            if (playerInput.x < 0)
             {
                 rotation = Quaternion.AngleAxis(-90f, Vector3.up);
             }
-            else if (playerInput.x == 1)
+            else if (playerInput.x > 0)
             {
                 rotation = Quaternion.AngleAxis(90f, Vector3.up);
             }
 
-            if (playerInput.y == -1)
+            if (playerInput.y < 0)
             {
                 rotation = Quaternion.AngleAxis(-180f, Vector3.up);
             }
-            else if (playerInput.y == 1)
+            else if (playerInput.y > 0)
             {
                 rotation = Quaternion.AngleAxis(0f, Vector3.up);
             }
