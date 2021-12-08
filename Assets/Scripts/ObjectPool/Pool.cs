@@ -72,8 +72,8 @@ namespace ObjectPool
         
         public Vector3 GetRandomPosition()
         {
-            float x = Random.Range(-15f, 15f);
-            float z = Random.Range(-15f, 15f);
+            float x = Random.Range(-10f, 10f);
+            float z = Random.Range(-10f, 10f);
             return new Vector3(x, 5f, z);
         }
     }

@@ -13,7 +13,7 @@ namespace Player
             {
                 if (ItemInventory.Instance.GetAmountFromInventory(itemType) > 0) //Todo put in statement over this?
                 {
-                    Vector3 position = transform.position + transform.forward * 2;
+                    Vector3 position = transform.position + transform.forward * 1.5f;
                     Pool.Instance.GetPoolObject(itemType, position).AddForceToItem(transform.forward);
                     ItemInventory.Instance.RemoveFromInventory(itemType);
                 }
