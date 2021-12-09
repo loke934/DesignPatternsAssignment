@@ -40,6 +40,13 @@ namespace Inventory
             ItemInventory.Instance.OnCannotCraft += DeactivateCraftText;
             wasteSpawner.OnGameOver += GameOver;
         }
+        private void UnSubscribeToEvents()
+        {
+            ItemInventory.Instance.OnUpdateInventory -= UpdateInventoryText;
+            ItemInventory.Instance.OnCanCraft -= ActivateCraftText;
+            ItemInventory.Instance.OnCannotCraft -= DeactivateCraftText;
+            wasteSpawner.OnGameOver -= GameOver;
+        }
 
         private void UpdateInventoryText(ItemType itemType, int amount)
         {
@@ -76,6 +83,7 @@ namespace Inventory
         private void GameOver()
         {
             gameOverCanvas.SetActive(true);
+            UnSubscribeToEvents();
         }
     }
 }
