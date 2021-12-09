@@ -9,7 +9,7 @@ The objective is to craft and place a certain amount of waste bins before the tr
 My main focus was to test and use design patterns. There are a lot of improvements that could be made but this is something for me to continue building on as I learn more. 
 
 ### Singleton
-Used on the 'ItemInventory.cs' and the 'Pool.cs' scripts, the choice was because I wanted a single instance of them as well as a global accessor. Maybe it wasn't necessary because I think maybe static methods could have been enough but I wanted to try to use the pattern. 
+Used on the `ItemInventory.cs` and the 'Pool.cs' scripts, the choice was because I wanted a single instance of them as well as a global accessor. Maybe it wasn't necessary because I think maybe static methods could have been enough but I wanted to try to use the pattern. 
 ### Component and composition
 The player is divided into components in an attempt to isolate related code, all scrips are found in 'Assets/Scripts/Player'. Combining data into structs are in the 'ItemSettings.cs' and 'WasteSpawnSettings.cs', nothing fancy, they are used to make lists to loop through when creating and spawning objects.
 ### Object Pool and Factory
