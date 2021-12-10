@@ -27,12 +27,17 @@ namespace Inventory
         private WasteSpawner wasteSpawner;
         private const string CanText = "Can";
         private const string CraftText = "CRAFT";
-        
-        private void Start()
+
+        private void OnEnable()
         {
             SubscribeToEvents();
         }
 
+        private void OnDisable()
+        {
+            UnSubscribeToEvents();
+        }
+        
         private void SubscribeToEvents()
         {
             ItemInventory.Instance.OnUpdateInventory += UpdateInventoryText;
@@ -83,7 +88,6 @@ namespace Inventory
         private void GameOver()
         {
             gameOverCanvas.SetActive(true);
-            UnSubscribeToEvents();
         }
     }
 }

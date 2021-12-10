@@ -20,9 +20,18 @@ namespace ObjectPool
 
         public event EventDelegate OnGameOver;
 
-        private void Start()
+        private void OnEnable()
         {
             ItemInventory.Instance.OnAllBinsPlaced += StopSpawning;
+        }
+
+        private void OnDisable()
+        {
+            ItemInventory.Instance.OnAllBinsPlaced -= StopSpawning;
+        }
+
+        private void Start()
+        {
             InitialSpawning();
             StartCoroutine(ContinuousSpawn());
         }
